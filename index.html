@@ -87,6 +87,9 @@
         <p class="text-neutral-300 mt-2">Flat rule for clarity: $1,500/month or 10% of ad spend (whichever is higher)</p>
         <div class="mt-6 grid gap-5">
           <label class="text-sm text-neutral-400">Monthly Ad Spend (USD)</label>
+          <div class="text-center mb-2">
+            <span class="text-2xl font-bold text-white transition-transform duration-200" id="current-ad-spend">$15,000</span>
+          </div>
           <input type="range" min="5000" max="300000" step="500" value="15000" class="w-full accent-white" />
           <div class="flex justify-between text-xs text-neutral-400">
             <span>$5k</span><span>$15k</span><span>$50k</span><span>$300k</span>
@@ -254,25 +257,47 @@
 
   <!-- JavaScript for Interactive Features -->
   <script>
-    // Fee Calculator Functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const slider = document.querySelector('input[type="range"]');
-      const managementFee = document.querySelector('.text-2xl.font-bold.mt-1');
-      const effectivePercentage = document.querySelector('.text-2xl.font-bold.mt-1:last-of-type');
-      
-      if (slider && managementFee && effectivePercentage) {
-        function updateCalculator() {
-          const adSpend = parseInt(slider.value);
-          const fee = Math.max(1500, adSpend * 0.1);
-          const percentage = ((fee / adSpend) * 100).toFixed(1);
-          
-          managementFee.textContent = `$${fee.toLocaleString()}+`;
-          effectivePercentage.textContent = `${percentage}%`;
-        }
+          // Fee Calculator Functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const slider = document.querySelector('input[type="range"]');
         
-        slider.addEventListener('input', updateCalculator);
-        updateCalculator(); // Initialize on page load
-      }
+        if (slider) {
+          function updateCalculator() {
+            const adSpend = parseInt(slider.value);
+            const fee = Math.max(1500, adSpend * 0.1);
+            const percentage = ((fee / adSpend) * 100).toFixed(1);
+            
+            // Update the current ad spend display
+            const currentAdSpendElement = document.getElementById('current-ad-spend');
+            if (currentAdSpendElement) {
+              currentAdSpendElement.textContent = `$${adSpend.toLocaleString()}`;
+              // Add a subtle animation
+              currentAdSpendElement.classList.add('scale-110');
+              setTimeout(() => currentAdSpendElement.classList.remove('scale-110'), 200);
+            }
+            
+            // Update the Management Fee display
+            const managementFeeElement = document.querySelector('.rounded-2xl.border.border-neutral-800.bg-neutral-950.p-5 .text-2xl.font-bold.mt-1');
+            if (managementFeeElement) {
+              managementFeeElement.textContent = `$${fee.toLocaleString()}`;
+              // Add a subtle animation
+              managementFeeElement.classList.add('scale-110');
+              setTimeout(() => managementFeeElement.classList.remove('scale-110'), 200);
+            }
+            
+            // Update the Effective % display
+            const effectivePercentageElement = document.querySelector('.rounded-2xl.border.border-neutral-800.bg-neutral-950.p-5:last-child .text-2xl.font-bold.mt-1');
+            if (effectivePercentageElement) {
+              effectivePercentageElement.textContent = `${percentage}%`;
+              // Add a subtle animation
+              effectivePercentageElement.classList.add('scale-110');
+              setTimeout(() => effectivePercentageElement.classList.remove('scale-110'), 200);
+            }
+          }
+          
+          slider.addEventListener('input', updateCalculator);
+          updateCalculator(); // Initialize on page load
+        }
       
       // Copy Quote Summary functionality
       const copyButton = document.querySelector('button');
